@@ -9,9 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mantine/core": "^4.2.11",
+    "@mantine/dropzone": "^4.2.11",
+    "@mantine/hooks": "^4.2.11",
+    "@mantine/next": "^4.2.11",
+    "@mantine/notifications": "^4.2.11",
+    "axios": "^0.27.2",
     "next": "12.2.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-query": "^3.39.1",
+    "tabler-icons-react": "^1.51.0"
   },
   "devDependencies": {
     "@types/node": "18.0.0",
