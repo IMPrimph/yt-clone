@@ -1,11 +1,14 @@
 import "../styles/globals.css";
-import type { AppProps } from "next/app";
-import { MantineProvider } from "@mantine/core";
+import { AppProps } from "next/app";
 import Head from "next/head";
-import { NotificationsProvider } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { MantineProvider } from "@mantine/core";
+import { NotificationsProvider } from "@mantine/notifications";
 import { NextPage } from "next";
 import { ReactElement, ReactNode } from "react";
+import { MeContextProvider } from "../context/me";
+
+const queryClient = new QueryClient();
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -15,35 +18,42 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  const getLayout = Component.getLayout || ((page) => page);
+export default function App(props: AppPropsWithLayout) {
+  const { Component, pageProps } = props;
+
+  // Use the layout defined at the page level, if available
+  const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
     <>
       <Head>
-        <title>Youtube Clone</title>
+        <title>Page title</title>
         <meta
           name="viewport"
-          content="minimum-scale=1, initial-scale=1, width='device-width"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
+
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
         theme={{
+          /** Put your mantine theme override here */
           colorScheme: "light",
         }}
       >
         <NotificationsProvider>
-          {getLayout(
-            <main>
-              <Component {...pageProps} />
-            </main>
-          )}
+          <QueryClientProvider client={queryClient}>
+            <MeContextProvider>
+              {getLayout(
+                <main>
+                  <Component {...pageProps} />
+                </main>
+              )}
+            </MeContextProvider>
+          </QueryClientProvider>
         </NotificationsProvider>
       </MantineProvider>
     </>
   );
 }
-
-export default MyApp;
